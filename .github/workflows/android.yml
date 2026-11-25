@@ -2,6 +2,7 @@ name: Build APK
 
 on:
   push:
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
@@ -13,19 +14,17 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
-
-      - uses: android-actions/setup-android@v3
+          java-version: "17"
 
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 8.9
+          gradle-version: "8.7"
 
       - name: Build debug APK
-        run: gradle :app:assembleDebug --stacktrace
+        run: gradle assembleDebug --no-daemon --stacktrace
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Surface-debug-apk
+          name: midi-surface-debug
           path: app/build/outputs/apk/debug/app-debug.apk
-        
+          if-no-files-found: error
